@@ -1,0 +1,6 @@
+package ch.cern.atlas.client;
+
+public enum ShiftType {
+	SHIFT_LEADER, RUN_CONTROL, SLIMOS, OPM, RPE, RPA, DCS, APPL, APP, TRIGGER, LEVEL_1, DAQ_HLT,
+	PIXEL, IDGEN, SCT, TRT, MU_MDT, MU_RPC, MU_TGC, DQ, TILE, LAR_EXP, LAR, TIER_0, ADC, LUMI
+}
