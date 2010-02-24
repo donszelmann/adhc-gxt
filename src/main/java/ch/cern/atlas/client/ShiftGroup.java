@@ -4,6 +4,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 import com.extjs.gxt.ui.client.Style.HorizontalAlignment;
+import com.extjs.gxt.ui.client.data.BaseListLoader;
+import com.extjs.gxt.ui.client.data.DataProxy;
+import com.extjs.gxt.ui.client.data.ListLoadResult;
+import com.extjs.gxt.ui.client.data.RpcProxy;
 import com.extjs.gxt.ui.client.event.ColumnModelEvent;
 import com.extjs.gxt.ui.client.event.ComponentEvent;
 import com.extjs.gxt.ui.client.event.Events;
@@ -19,13 +23,16 @@ import com.google.gwt.user.client.Element;
 
 public class ShiftGroup extends LayoutContainer {
 	private ContentPanel cp;
-	private Grid<Shift> grid;
-	private ListStore<Shift> store;
+	private Grid<ShiftAdapter> grid;
+	private ListStore<ShiftAdapter> store;
 
 	public ShiftGroup(ShiftType[] shiftTypes) {
-		store = new ListStore<Shift>();
+		DataProxy proxy = new RpcProxy<D>() {
+		};
+		ListLoader<ListLoadResult<ShiftAdapter>> loader = new BaseListLoader<ListLoadResult<ShiftAdapter>>(proxy, reader)
+		store = new ListStore<ShiftAdapter>(loader);
 		for (int i = 0; i < shiftTypes.length; i++) {
-			store.add(new Shift(shiftTypes[i]));
+			store.add(new ShiftAdapter(shiftTypes[i]));
 		}
 	}
 
@@ -64,7 +71,7 @@ public class ShiftGroup extends LayoutContainer {
 		column.setId("period");
 		column.setMenuDisabled(true);
 		column.setSortable(false);
-		column.setWidth(60);
+//		column.setWidth(60);
 		configs.add(column);
 
 		ColumnModel cm = new ColumnModel(configs);
@@ -76,16 +83,16 @@ public class ShiftGroup extends LayoutContainer {
 		cp.setButtonAlign(HorizontalAlignment.CENTER);
 		cp.setLayout(new FitLayout());
 		cp.setAutoWidth(true);
-
-		grid = new Grid<Shift>(store, cm);
+		
+		grid = new Grid<ShiftAdapter>(store, cm);
 		grid.getView().setForceFit(true);
 		grid.setStyleAttribute("borderTop", "none");
-		// grid.setAutoExpandColumn("name");
+		grid.setAutoExpandColumn("name");
 		// grid.setHideHeaders(true);
 		grid.setBorders(true);
 		grid.setStripeRows(true);
 		grid.setAutoWidth(true);
-
+		
 		grid.addListener(Events.ViewReady, new Listener<ComponentEvent>() {
 			public void handleEvent(ComponentEvent be) {
 				// grid.getStore().addListener(Store.Add,
